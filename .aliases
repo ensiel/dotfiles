@@ -1,0 +1,41 @@
+# Tilix
+if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
+        source /etc/profile.d/vte.sh
+fi
+
+# Aliases
+#
+# Oh my zsh
+alias zs="vim ~/.zshrc"
+alias zsr="source ~/.zshrc"
+
+# i3wm
+alias i3c="vim ~/.config/i3/config"
+alias cinnamond="/usr/lib/x86_64-linux-gnu/cinnamon-settings-daemon/csd-xrandr"
+
+# Git
+alias gs="git status"
+alias ga="git add"
+alias gd="git diff"
+alias gcm="git commit -m"
+alias gpo="git push origin"
+
+# CLI Apps
+alias yg="you-get"
+alias i="sxiv"
+alias weather="curl 'https://wttr.in/?0'"
+alias mc="maid clean -f"
+
+# Transfer
+function transfer() {
+    # write to output to tmpfile because of progress bar
+    tmpfile=$( mktemp -t transferXXX )
+    curl --progress-bar --upload-file $1 https://transfer.sh/$(basename $1) >> $tmpfile;
+    cat $tmpfile;
+    rm -f $tmpfile;
+}
+
+# Amazon
+function amazon() {
+    amzsear $1 -r MX
+}

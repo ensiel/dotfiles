@@ -1,0 +1,9 @@
+Maid.rules do
+
+    rule 'Insta' do
+        dir('~/Downloads/*{.jpg,mp4}').each do |path|
+            move(path, '~/Pictures/Insta')
+        end
+    end
+
+end

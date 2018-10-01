@@ -12,13 +12,10 @@ floating_modifier $mod
 bindsym $mod+Return exec tilix
 
 # lock screen
-bindsym $mod+Shift+u exec i3lock -i ~/Pictures/galaxy.png
+bindsym $mod+Shift+u exec i3lock -i ~/Pictures/Walls/lock.png
 
 # kill focused window
 bindsym $mod+Shift+q kill
-
-# Rofi
-bindsym $mod+d exec rofi -show run -lines 3 -eh 2 -fullscreen -padding 300 -opacity "95" -bw 0 -bc "$bg-color" -bg "$bg-color" -fg "$text-color" -hlbg "$bg-color" -hlfg "#9575cd" -font "Ubuntu 18"
 
 # change focus
 bindsym $mod+j focus left
@@ -70,12 +67,12 @@ bindsym $mod+a focus parent
 # focus the child container
 #bindsym $mod+d focus child
 
-set $ws1 "1: Interwebs "
-set $ws2 "2: Hackerman "
-set $ws3 "3: Chitchat "
-set $ws4 "4: Mo' Money"
-set $ws5 "5: Mo' Problems"
-set $ws6 "6"
+set $ws1 " Interwebs"
+set $ws2 " Hackerman"
+set $ws3 " Chitchat "
+set $ws4 "Mo' Money"
+set $ws5 "Mo' Problems"
+set $ws6 "Better Call Saul"
 set $ws7 "7"
 set $ws8 "8"
 set $ws9 "9"
@@ -105,15 +102,18 @@ bindsym $mod+Shift+8 move container to workspace $ws8
 bindsym $mod+Shift+9 move container to workspace $ws9
 bindsym $mod+Shift+0 move container to workspace $ws10
 
-workspace $ws1 output HDMI1
-workspace $ws2 output DP1
-workspace $ws3 output DP1
-workspace $ws4 output HDMI1
-#
-# workspace $ws1 output eDP1
-# workspace $ws2 output DP1
-# workspace $ws3 output DP1
-# workspace $ws4 output eDP1
+workspace $ws1 output HDMI-1
+workspace $ws2 output DP-1
+workspace $ws3 output DP-1
+workspace $ws4 output HDMI-1
+workspace $ws5 output DP-1
+
+# i3-gaps
+gaps inner 20
+gaps outer 20
+
+workspace $ws2 gaps inner 10
+workspace $ws2 gaps outer 10
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -149,32 +149,44 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 set $bg-color            #2f343f
+set $active-bg-color     #3498db
 set $inactive-bg-color   #2f343f
 set $text-color          #f3f4f5
 set $inactive-text-color #676E7D
-set $urgent-bg-color     #E53935
+set $urgent-bg-color     #E74C3C
+set $separator-color     #757575
+set $border-color        #596275
 
 # window colors
 #                       border              background         text                 indicator
-client.focused          $bg-color           $bg-color          $text-color          $bg-color
+client.focused          $bg-color           $border-color      $text-color          $bg-color
 client.unfocused        $inactive-bg-color  $inactive-bg-color $inactive-text-color $bg-color
 client.focused_inactive $inactive-bg-color  $inactive-bg-color $inactive-text-color $bg-color
 client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color          $bg-color
+
+# Border width
+default_border pixel 3
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
         status_command i3blocks
+        position bottom
+        separator_symbol "·"
         tray_output primary
         colors {
             background $bg-color
-            separator #757575
+            separator  $separator-color
             #                  border             background            text
             focused_workspace  $bg-color          $bg-color             $text-color
             inactive_workspace $inactive-bg-color $inactive-bg-color    $inactive-text-color
             urgent_workspace   $urgent-bg-color   $urgent-bg-color      $text-color
         }
 }
+
+# Rofi
+# bindsym $mod+d exec rofi -show run -lines 3 -eh 2 -fullscreen -padding 300 -opacity "95" -bw 0 -bc "$bg-color" -bg "$bg-color" -fg "$text-color" -hlbg "$bg-color" -hlfg "#9575cd" -font "Ubuntu 18"
+bindsym $mod+d exec rofi -show run -lines 3 -eh 2 -padding 300 -font "Ubuntu 18" -fullscreen -theme ~/.config/i3/android_notification
 
 # key-bindings
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 1 +5% #increase sound volume
@@ -186,7 +198,12 @@ bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 bindsym --release Caps_Lock exec pkill -SIGRTMIN+11 i3blocks
 bindsym --release Num_Lock  exec pkill -SIGRTMIN+11 i3blocks
+
+# Screenshot with scrot
 bindsym --release $mod+x exec --no-startup-id scrot -s -e 'xclip -selection clipboard -t image/png -i $f && trash $f'
+
+# Screenshot with gnome-screenshot
+# bindsym --release $mod+x exec --no-startup-id gnome-screenshot -a -f screenshot.png && xclip -selection clipboard -t image/png -i screenshot.png && trash screenshot.png
 bindsym --release $mod+b exec --no-startup-id ~/Code/scripts/fix_bluetooth.sh
 
 bindsym --release $mod+m exec --no-startup-id xrandr --output DP1 --auto --output eDP1 --auto --left-of DP1
@@ -196,9 +213,10 @@ assign [class="Tilix"] $ws2
 assign [class="Spotify"] $ws3
 
 # startup
-exec --no-startup-id xrandr --output HDMI1 --auto --primary --output DP1 --auto --rotate left --right-of HDMI1 --output eDP1 --off
+exec --no-startup-id xrandr --output HDMI-1 --auto --primary --output DP-1 --auto --rotate left --right-of HDMI-1 --output eDP-1 --off
 exec --no-startup-id nm-applet
-exec_always --no-startup-id feh --bg-fill /home/asael/Pictures/beast.jpg
-exec --no-startup-id compton -f
+exec_always --no-startup-id feh --bg-fill /home/asaelx/Pictures/Walls/ktcd0zq8gnd01.jpg /home/asaelx/Pictures/Walls/spiderman.jpg
+exec --no-startup-id compton -fbc
 exec --no-startup-id google-chrome-stable
 exec --no-startup-id tilix
+
